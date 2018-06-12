@@ -1,0 +1,17 @@
+{
+    "aid": 7,
+    "effects": [
+        {
+        "eid": 1,
+        "name": "fade"
+        },
+        {
+        "eid": 3,
+        "name": "jump"
+        }
+    ],
+    "cta": "Click to see more cats!",
+    "imageUrl": "https://static.makeuseof.com/wp-content/uploads/2012/08/computer-cat.jpg",
+    "clickUrl": "https://kotiki.d3.ru/",
+    "userId": null
+}

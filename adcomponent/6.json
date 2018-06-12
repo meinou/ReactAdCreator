@@ -1,0 +1,13 @@
+{
+    "aid": 6,
+    "effects": [
+        {
+        "eid": 1,
+        "name": "fade"
+        }
+    ],
+    "cta": "When will Trump destroy the world?",
+    "imageUrl": "https://www.zerohedge.com/sites/default/files/styles/teaser_desktop_2x/public/2018-06/2018.06.10soros.JPG",
+    "clickUrl": "https://www.zerohedge.com/",
+    "userId": null
+}

@@ -9,3 +9,15 @@ input {
 button {
     
 }
+
+.adForm{
+    float: left;
+    &input{
+        width: 70%;
+    }
+    &label {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 1.5em;
+    }
+    
+}
