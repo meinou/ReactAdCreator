@@ -3,7 +3,7 @@ import axios from 'axios';
 const userService = {};
 
 const baseUrl = 'http://localhost:8080/users/users'
-
+//const baseUrl = "process.env.REACT_APP_HOST:8080/users/users";
 
 userService.getByName = (userName) => {
     const url = `${baseUrl}/login/${userName}`;

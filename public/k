@@ -1,0 +1,25 @@
+<style type="text/css">
+    .ad-root 
+    { height: 280px; width: 100%; text-align: center;display: flex;align-items: center; justify-content: center }  
+    .ad-root .ad-wrp 
+    { text-align: left; position: relative; }  
+    .ad-root span { color: gray; font-size: 12px }  
+    .ad-root .ad-image { position: relative; height: 240px; transition: all 2s ease; filter: grayscale(0%);}  
+    .ad-root .ad-image.ad-fade { filter: grayscale(100%); transition: all 2s ease; }  
+    .ad-root .ad-image .ad-text { color: gray; display: block;}  
+    .ad-root img { visibility: hidden; height: 240px; }  
+    .ad-root a 
+    { display: inline-table; margin-bottom: 15px; transform: translateX(-50%); 
+    position: absolute; bottom: 0px; left: 50%; padding: 15px; 
+    background-color: white; border: 2px solid dodgerblue; border-radius: 4px; cursor: pointer; text-decoration: none; }  
+    .ad-root a:visited { color: dodgerblue; } 
+</style>
+
+
+
+
+
+
+
+
+.ad-root { height: 280px; width: 100%; text-align: center;display: flex;align-items: center; justify-content: center }  .ad-root .ad-wrp { text-align: left; position: relative; }  .ad-root span { color: gray; font-size: 12px }  .ad-root .ad-image { position: relative; height: 240px; transition: all 2s ease; filter: grayscale(0%);}  .ad-root .ad-image.ad-fade { filter: grayscale(100%); transition: all 2s ease; }  .ad-root .ad-image .ad-text { color: gray; display: block;}  .ad-root img { visibility: hidden; height: 240px; }  .ad-root a { display: inline-table; margin-bottom: 15px; transform: translateX(-50%); position: absolute; bottom: 0px; left: 50%; padding: 15px; background-color: white; border: 2px solid dodgerblue; border-radius: 4px; cursor: pointer; text-decoration: none; }  .ad-root a:visited { color: dodgerblue; } 

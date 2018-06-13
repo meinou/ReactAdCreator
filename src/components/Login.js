@@ -105,29 +105,36 @@ class Login extends Component {
     }
     
     render() {
-        const form = (<div className="form">
-                        <div className="form-group">
-                            <input className="form-control" placeholder="username" type="text" value = {this.state.user.userName} onChange={this.loginChangeHandler} /> 
-                        </div>
+        return (
+            <div className="row">
+            <div className="col-xs-8 col-sm-6">
+            <div className="form">
+                <div className="form-group">
+                    <input className="form-control" placeholder="username" type="text" value = {this.state.user.userName} onChange={this.loginChangeHandler} /> 
+                </div>
 
-                        <div className="form-group">
-                            <input className="form-control" placeholder="password" type="password" value = {this.state.user.password} onChange={this.passwordChangeHandler} /> 
-                        </div>
+                <div className="form-group">
+                    <input className="form-control" placeholder="password" type="password" value = {this.state.user.password} onChange={this.passwordChangeHandler} /> 
+                </div>
 
-                        <div className="form-group">
-                            <input className="form-control" placeholder="email" type="email" value = {this.state.password} onChange={this.emailChangeHandler} /> 
-                        </div>
+                <div className="form-group">
+                    <input className="form-control" placeholder="email" type="email" value = {this.state.password} onChange={this.emailChangeHandler} /> 
+                </div>
 
-                        <div className="form-group">
-                            {!!this.state.warning && this.state.warning !== "" ? this.state.warning : ""}
-                        </div>
-                        <button className="btn btn-info" onClick={this.loginClickHandler}>Login</button>
-                        
-                        <button className="btn btn-info" onClick={this.registerClickHandler}>Register</button>
-                    
-                     </div>);
-        
-        return (<div> {form}</div>);
+                <div className="form-group">
+                    {!!this.state.warning && this.state.warning !== "" ? this.state.warning : ""}
+                </div>
+
+                <div className="form-group login-buttons">
+                    <button className="btn btn-info" onClick={this.loginClickHandler}>Login</button>
+                    <button className="btn btn-info" onClick={this.registerClickHandler}>Register</button>
+                </div>
+            
+                </div>
+            </div>
+            <div className="col-xs-4 col-sm-6">
+            </div>
+          </div>);
     }
 }
 

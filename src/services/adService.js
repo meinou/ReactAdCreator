@@ -4,6 +4,7 @@ const adService = {};
 
 //const baseUrl = 'http://localhost:8084';
 const baseUrl = "http://localhost:8080/creator";
+//const baseUrl = "process.env.REACT_APP_HOST:8080/creator"
 //http://localhost:8080/creator/ads/users/1
 //const baseUrl = 'http://ec2-18-188-3-4.us-east-2.compute.amazonaws.com:8080/creator' 
 //const baseUrl = process.env.REACT_APP_HOST + '/creator';
@@ -18,9 +19,12 @@ adService.getByUser = (userId) => {
     return axios.get(url);
 }
 
-adService.getAds = () => {
-    
+adService.getById = (aid) => {
+    const url = `${baseUrl}/ads/${aid}`;
+    return axios.get(url);
+}
 
+adService.getAds = () => {
     const url = `${baseUrl}/ads`;
     console.log("GETTING... ", url);
     return axios.get(url);

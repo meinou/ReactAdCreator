@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
+//import { showAd } from '../adcomponent';
 
 class UserPrevious extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ads: []
+            ads: !!this.props.ads ? [...this.props.ads] : []
         }
         
     }
 
     componentDidMount() {
-        if (!this.props.ads) return;
+        if (!!this.props.ads)
+            this.setState({ads:[...this.props.ads]})
          
     }
 
@@ -18,19 +20,17 @@ class UserPrevious extends Component {
         if (!this.props.ads) return;
          console.log("next", next);
            if (next.ads.length != this.state.ads.length) 
-           this.setState({ads: next.ads.slice()})
+           this.setState({ads:[...next.ads]})
     }
 
 
-
-
-
     render() {
-        console.log("props", this.state.ads);
+        window.findAds();
+        console.log("ads", this.state.ads);
         const list = !!this.state.ads ? 
-        <div clasName="prev">
-            {this.state.ads.map((ad) => {return( <div><img src={ad.image_url} /></div>)})}
-        </div> : "";
+            <div className="footer prev">
+                {this.state.ads.map((ad) => {return( <div data-ad={ad.aid}></div>)})}
+            </div> : "";
         return (<div>{list}</div>)
     }
 }

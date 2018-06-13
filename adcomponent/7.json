@@ -3,7 +3,7 @@
     "effects": [
         {
         "eid": 1,
-        "name": "fade"
+        "name": "colorOnHover"
         },
         {
         "eid": 3,

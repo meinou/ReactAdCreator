@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Login from './components/Login';
-import Creator from './components/Creator'
+import Creator from './components/Creator';
 
 class App extends Component {
 
@@ -14,21 +14,37 @@ class App extends Component {
     this.logout = this.logout.bind(this);
   }
 
+  componentDidMount() {
+    if (localStorage) {
+      const user = localStorage.getItem('user');
+      console.log('user', user);
+      if (user) {
+        this.setState({ user: JSON.parse(user) });
+      }
+    }
+  }
+
   getUser(user) {
-    console.log("in getu", user);
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user));
+    }
     this.setState({ user });
   }
 
   logout() {
-    this.setState({user: null});
+    localStorage.setItem('user', null);
+    this.setState({ user: null });
   }
 
   render() {
     return (
-      
-      <div className="App">
-      {!this.state.user ? <Login getUser={this.getUser}/> : <button className="btn btn-info logout" onClick={this.logout}>Log out</button>}
-      {!this.state.user ? <h2>Please login or register</h2> : <Creator user={this.state.user}/>}
+      <div className="App container">
+        <div className="row">
+          <div className="col-md-12 col-lg-12">
+            <h2>{this.state.user ? 'Hi ' + this.state.user.userName + '!' : 'Please login or register'}</h2>
+          </div>
+        </div>
+        {this.state.user ? <Creator logout={this.logout} user={this.state.user}/> : <Login getUser={this.getUser}/>}
       </div>
     );
   }

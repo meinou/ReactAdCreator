@@ -1,23 +1,12 @@
-body{
-    
-}
-
-input {
-    margin: 15px;
-}
-
-button {
-    
-}
-
 .adForm{
-    float: left;
-    &input{
-        width: 70%;
-    }
-    &label {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        font-size: 1.5em;
-    }
-    
+    margin-top: 30px;
+}
+
+.footer {
+    float: bottom;
+    margin-top: 400px;
+}
+
+.effects-list {
+    margin-left: 45px;
 }

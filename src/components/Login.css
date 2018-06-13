@@ -1,9 +1,8 @@
 .form {
-  width: 30%;
-  margin: 15px; }
+  margin: 10px; }
 
 input {
   margin: 0px; }
 
-button {
-  margin: 15px; }
+.login-buttons .btn {
+  margin-right: 15px; }

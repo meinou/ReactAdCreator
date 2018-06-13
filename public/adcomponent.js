@@ -8,7 +8,7 @@ if (document.readyState === 'complete') {
 function findAds() {
     var ads = document.querySelectorAll('[data-ad]');
     for(var i = 0; i < ads.length; i++) {
-        httpGetAsync('http://localhost:8080/creator/ads/1') //+ ads[i].dataset.ad + '.json', showAd);
+        httpGetAsync('http://localhost:8080/creator/ads/' + ads[i].dataset.ad, showAd);
     }
 }
 
@@ -26,7 +26,7 @@ function httpGetAsync(theUrl, callback)
 function showAd(responseStr) {
     var response = JSON.parse(responseStr);
     var element = document.querySelector('[data-ad="' + response.aid + '"]');
-    if (element.dataset.rendered === 1) {
+    if (element.dataset.rendered === '1') {
         return;
     }
 
@@ -91,14 +91,19 @@ function getImageOrVideoDiv(response) {
                     element.className = element.className + ' ' + fadeEffect;
                 }   
             }, 1000, false);
-            window.addEventListener('scroll', function (e) {
+
+            var handleScroll = function (e) {
                 if (element.className && element.className.indexOf(fadeEffect) >= 0) {
                     element.className = element.className.replace(fadeEffect, '');
                 }
-    
                 // check if there's fade effect in response
                 turnGray();
-            });
+            }
+            var localRoot = document.querySelector('.ad-screen-wrap');
+            if (localRoot) {
+                localRoot.addEventListener('scroll', handleScroll);
+            }
+            window.addEventListener('scroll', handleScroll);
         }
         
     }
