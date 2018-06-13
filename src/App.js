@@ -38,10 +38,13 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App container">
+      <div className="App container-fluid">
         <div className="row">
-          <div className="col-md-12 col-lg-12">
+          <div className="col-xs-9 col-sm-9">
             <h2>{this.state.user ? 'Hi ' + this.state.user.userName + '!' : 'Please login or register'}</h2>
+          </div>
+          <div className="col-xs-3 col-sm-3">
+          <h2>{this.state.user ? <button className="btn btn-default" onClick={this.logout}>Log out</button> : null}</h2>
           </div>
         </div>
         {this.state.user ? <Creator logout={this.logout} user={this.state.user}/> : <Login getUser={this.getUser}/>}

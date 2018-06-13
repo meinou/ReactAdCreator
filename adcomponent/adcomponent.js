@@ -8,7 +8,7 @@ if (document.readyState === 'complete') {
 function findAds() {
     var ads = document.querySelectorAll('[data-ad]');
     for(var i = 0; i < ads.length; i++) {
-        httpGetAsync('http://localhost:8080/creator/ads/1') //+ ads[i].dataset.ad + '.json', showAd);
+        httpGetAsync('http://localhost:8080/creator/ads/' + ads[i].dataset.ad, showAd);
     }
 }
 
@@ -26,7 +26,7 @@ function httpGetAsync(theUrl, callback)
 function showAd(responseStr) {
     var response = JSON.parse(responseStr);
     var element = document.querySelector('[data-ad="' + response.aid + '"]');
-    if (element.dataset.rendered === 1) {
+    if (element.dataset.rendered === '1') {
         return;
     }
 
@@ -54,6 +54,7 @@ function getButton(response) {
 }
 
 var fadeEffect = 'ad-fade';
+var jump = 'bounceIn';
 var grayscaleOnHover = 'gray-on-hover';
 
 function getImageOrVideoDiv(response) {
@@ -80,7 +81,29 @@ function getImageOrVideoDiv(response) {
         element.className = 'ad-image ';
         element.appendChild(img);
 
-        // fade effects
+        // effects
+        if (response.effects && (response.effects.filter(e => e.name === "jump")).length) {
+            element.className += jump;
+            var setJump = debounce(function () {
+                if (element.className && element.className.indexOf(jump) < 0) {
+                    element.className = element.className + ' ' + jump;
+                }   
+            }, 1000, false);
+
+            var handleScroll = function (e) {
+                if (element.className && element.className.indexOf(jump) >= 0) {
+                    element.className = element.className.replace(jump, '');
+                }
+                // check if there's fade effect in response
+                setJump();
+            }
+            var localRoot = document.querySelector('.ad-screen-wrap');
+            if (localRoot) {
+                localRoot.addEventListener('scroll', handleScroll);
+            }
+            window.addEventListener('scroll', handleScroll);
+        }
+
         if (response.effects && (response.effects.filter(e => e.name === "colorOnHover")).length) {
             element.className += grayscaleOnHover;
         }
@@ -91,14 +114,19 @@ function getImageOrVideoDiv(response) {
                     element.className = element.className + ' ' + fadeEffect;
                 }   
             }, 1000, false);
-            window.addEventListener('scroll', function (e) {
+
+            var handleScroll = function (e) {
                 if (element.className && element.className.indexOf(fadeEffect) >= 0) {
                     element.className = element.className.replace(fadeEffect, '');
                 }
-    
                 // check if there's fade effect in response
                 turnGray();
-            });
+            }
+            var localRoot = document.querySelector('.ad-screen-wrap');
+            if (localRoot) {
+                localRoot.addEventListener('scroll', handleScroll);
+            }
+            window.addEventListener('scroll', handleScroll);
         }
         
     }
@@ -114,6 +142,7 @@ function setStyles(element, response) {
         + ' .ad-root span { color: gray; font-size: 12px } '
         + ' .ad-root .ad-image { position: relative; height: 240px; transition: all 2s ease; filter: grayscale(0%);} '
         + ' .ad-root .ad-image.ad-fade { filter: grayscale(100%); transition: all 2s ease; } '
+        + ' -webkit-keyframes bounceIn{0%,20%,40%,60%,80%,to{-webkit-animation-timing-function:cubic-bezier(.215,.61,.355,1);animation-timing-function:cubic-bezier(.215,.61,.355,1)}0%{opacity:0;-webkit-transform:scale3d(.3,.3,.3);transform:scale3d(.3,.3,.3)}20%{-webkit-transform:scale3d(1.1,1.1,1.1);transform:scale3d(1.1,1.1,1.1)}40%{-webkit-transform:scale3d(.9,.9,.9);transform:scale3d(.9,.9,.9)}60%{opacity:1;-webkit-transform:scale3d(1.03,1.03,1.03);transform:scale3d(1.03,1.03,1.03)}80%{-webkit-transform:scale3d(.97,.97,.97);transform:scale3d(.97,.97,.97)}to{opacity:1;-webkit-transform:scaleX(1);transform:scaleX(1)}}@keyframes bounceIn{0%,20%,40%,60%,80%,to{-webkit-animation-timing-function:cubic-bezier(.215,.61,.355,1);animation-timing-function:cubic-bezier(.215,.61,.355,1)}0%{opacity:0;-webkit-transform:scale3d(.3,.3,.3);transform:scale3d(.3,.3,.3)}20%{-webkit-transform:scale3d(1.1,1.1,1.1);transform:scale3d(1.1,1.1,1.1)}40%{-webkit-transform:scale3d(.9,.9,.9);transform:scale3d(.9,.9,.9)}60%{opacity:1;-webkit-transform:scale3d(1.03,1.03,1.03);transform:scale3d(1.03,1.03,1.03)}80%{-webkit-transform:scale3d(.97,.97,.97);transform:scale3d(.97,.97,.97)}to{opacity:1;-webkit-transform:scaleX(1);transform:scaleX(1)}} .ad-root .ad-image.bounceIn{-webkit-animation-duration:.75s;animation-duration:.75s;-webkit-animation-name:bounceIn;animation-name:bounceIn}'
         + ' .ad-root .ad-image .ad-text { color: gray; display: block;} '
         + ' .ad-root img { visibility: hidden; height: 240px; } '
         + ' .ad-root a { display: inline-table; margin-bottom: 15px; transform: translateX(-50%); position: absolute; bottom: 0px; left: 50%; padding: 15px; background-color: white; border: 2px solid dodgerblue; border-radius: 4px; cursor: pointer; text-decoration: none; } '

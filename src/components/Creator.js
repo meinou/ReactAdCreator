@@ -13,12 +13,14 @@ class Creator extends Component {
 
         this.state = {
             ad: {},
+            ads: [],
+            userAds: [],
             effects: null,
             image_url : "",
             label: "",
             aid: null,
-            show: false,
             isMobile: true,
+            showAll: false,
         }
         this.ctaChangeHandler = this.ctaChangeHandler.bind(this);
         this.clickUrlChangeHandler = this.clickUrlChangeHandler.bind(this);
@@ -38,12 +40,13 @@ class Creator extends Component {
            
     }
     
-    showClickHandler() {
-        this.setState({ show: !this.state.show });
+    showClickHandler(show) {
+        this.getByUser();
+        this.setState({ showAll: show === 'all' });
     }
 
     modeChangeHandler(mode) {
-        this.setState({ isMobile: mode === 'mobile' });
+        this.setState({ isMobile: mode === 'mobile' }, this.recreateAds);
     }
 
     effectsChangeHandler(i) {
@@ -74,20 +77,13 @@ class Creator extends Component {
         newAd.userId = this.props.user.id;
         newAd[field] = value;
         this.setState({ ad: newAd, clicked: false }, this.updateAd);
-        this.getByUser();
+        // this.getByUser();
     }
 
     getByUser() {
         return adService.getByUser(this.props.user.id)
                 .then((response) => {
-                    this.setState({userAds: response.data}, () => {
-                        if (window.destroyAds) {
-                            window.destroyAds();
-                        }
-                        if (window.findAds) {
-                            window.findAds();
-                        }
-                    });
+                    this.setState({userAds: response.data}, this.recreateAds);
                 });
     }
 
@@ -100,31 +96,40 @@ class Creator extends Component {
 
         promise
             .then((response) => {
-                this.setState({ ad: response.data });
+                this.setState({ ad: response.data }, this.recreateAds);
                 console.debug("after set state ", this.state.ad);  
             })
             .catch(console.error);
     }
 
+    recreateAds() {
+        if (window.destroyAds) {
+            window.destroyAds();
+        }
+        if (window.findAds) {
+            window.findAds();
+        }
+    }
+
     render() {
         console.log(this.state.ad.aid);
-        return(<div className="container">
-            <div className="row">
-                <div className="col-sm-2">
-                    <button className="btn btn-default logout" onClick={this.props.logout}>Log out</button>
-                </div>
-                <div className="col-sm-4">
-                <div className="btn-group" role="group" aria-label="...">
-                    <button className={"btn btn-info " + (this.state.isMobile ? " active" : "")} onClick={this.modeChangeHandler.bind(this, 'mobile')} >Mobile</button>
-                    <button className={"btn btn-info " + (this.state.isMobile ? "" : "active")} onClick={this.modeChangeHandler.bind(this, 'desktop')}>Desktop</button>
-                </div>
-                </div>
-                <div className="col-sm-4">
-                    <button className="btn btn-info" onClick={this.showClickHandler}>Show all my ads</button>
-                </div>
-            </div>
+        return(<div className="container-fluid">
             <div className="adForm row">
-                <div className="col-sm-6 col-md-6">
+                <div className="col-sm-4 col-md-4">
+                    <div className="row">
+                        <div className="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                            <div className="btn-group" role="group" aria-label="...">
+                                <button className={"btn btn-info " + (this.state.isMobile ? " active" : "")} onClick={this.modeChangeHandler.bind(this, 'mobile')} >Mobile</button>
+                                <button className={"btn btn-info " + (this.state.isMobile ? "" : "active")} onClick={this.modeChangeHandler.bind(this, 'desktop')}>Desktop</button>
+                            </div>
+                        </div>
+                        <div className="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                            <div className="btn-group" role="group" aria-label="...">
+                                <button className={"btn btn-info " + (this.state.showAll ? "" : " active")} onClick={this.showClickHandler.bind(this, 'new')} >Current</button>
+                                <button className={"btn btn-info " + (this.state.showAll ? "active" : "")} onClick={this.showClickHandler.bind(this, 'all')}>All</button>
+                            </div>
+                        </div>
+                    </div>
                     <div className="form-group">
                         <label htmlFor="creatorImage">Image url</label>
                         <input id="creatorImage" className="form-control" placeholder="Required: image url" type="text" value={this.state.ad.imageUrl ? this.state.ad.imageUrl : ''} onChange={this.imageUrlChangeHandler}/>
@@ -137,9 +142,7 @@ class Creator extends Component {
                         <label htmlFor="creatorCta">CTA</label>
                         <input id="creatorCta" className="form-control" placeholder="Call to action" type="text" value={this.state.ad.cta ? this.state.ad.cta : ''} onChange={this.ctaChangeHandler}/>
                     </div>
-                </div>
-                <div className="col-sm-6 col-md-6">
-                    <h4>Choose effects</h4>
+                    <label>Choose effects</label>
                     <div className="effects-list">
                     {this.state.effects ? this.state.effects.map((e, i) => <div key={i} className="form-check">
                         <label className="checkbox" htmlFor={'effectCheckbox' + i}>
@@ -147,14 +150,13 @@ class Creator extends Component {
                             {e.name}</label>
                     </div>) : null}
                     </div>
+                    <div>To use in your application copy: "&lt;script src="adcomponent.js" type="text/javascript">&lt;/script>&lt;div data-ad="{this.state.ad.aid}">&lt;/div>" </div>
+                </div>
+                <div className="col-sm-8 col-md-8">
+                {this.state.isMobile ? <MobilePreview aid={this.state.ad.aid} ads={this.state.userAds} showAll={this.state.showAll}/>  
+                    : <DesktopPreview aid={this.state.ad.aid}  ads={this.state.userAds} showAll={this.state.showAll}/>}
                 </div>
             </div>
-            
-            {this.state.ad.aid ? 
-                this.state.isMobile ? <MobilePreview aid={this.state.ad.aid}/>  : <DesktopPreview aid={this.state.ad.aid}/>
-                : ""}
-
-            {!!this.props.user && this.state.show ? <UserPrevious  ads={this.state.userAds}/> : ""}
         </div>);
     }
 }

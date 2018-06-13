@@ -6,12 +6,12 @@ class MobilePreview extends Component {
     }
 
     componentDidUpdate() {
-        // if (window.destroyAds) {
-        //     window.destroyAds();
-        // }
-        // if (window.findAds) {
-        //     window.findAds();
-        // }
+        if (window.destroyAds) {
+            window.destroyAds();
+        }
+        if (window.findAds) {
+            window.findAds();
+        }
     }
 
     render() {
@@ -38,12 +38,23 @@ class MobilePreview extends Component {
           <div className="screen">
                 <div className="ad-screen-wrap">
                     <div>
-                        <div className="content"></div>
-                        <div className="content"></div>
-                        <div data-ad={this.props.aid}></div>
-                        <div className="content"></div>
-                        <div className="content"></div>
-                        <div className="content"></div>
+                        {this.props.showAll ? this.props.ads.map((ad, i) => <div key={i}>
+                            <div className="content"></div>
+                            <div className="content"></div>
+                            <div data-ad={ad.aid}></div>
+                            <div className="content"></div>
+                            <div className="content"></div>
+                            <div className="content"></div>
+                        </div>):
+                        <div>
+                            <div className="content"></div>
+                            <div className="content"></div>
+                            <div data-ad={this.props.aid}></div>
+                            <div className="content"></div>
+                            <div className="content"></div>
+                            <div className="content"></div>
+                        </div>
+                        }
                     </div>
                 </div>
             <div className="signal">

@@ -107,7 +107,7 @@ class Login extends Component {
     render() {
         return (
             <div className="row">
-            <div className="col-xs-8 col-sm-6">
+            <div className="col-xs-8 col-sm-6 col-md-4 col-lg-4">
             <div className="form">
                 <div className="form-group">
                     <input className="form-control" placeholder="username" type="text" value = {this.state.user.userName} onChange={this.loginChangeHandler} /> 
