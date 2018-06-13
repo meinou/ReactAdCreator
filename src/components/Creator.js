@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import DesktopPreview from './DesktopPreview';
+import MobilePreview from './MobilePreview';
 import Validator from 'valid-url';
 import './Creator.css';
 import { Button } from 'reactstrap';
@@ -26,10 +27,6 @@ class Creator extends Component {
         this.getByUser = this.getByUser.bind(this);
         this.showClickHandler = this.showClickHandler.bind(this);
 
-        this.setScriptDivRef = element => {
-            console.log(element);
-        };
-
         this.updateAd = this.updateAd.bind(this);
     }
 
@@ -50,7 +47,6 @@ class Creator extends Component {
     }
 
     effectsChangeHandler(i) {
-       // console.log('this.state.effects', this.state.effects);
         if (this.state.effects) {
             this.state.effects[i].checked = !this.state.effects[i].checked;
 
@@ -82,11 +78,17 @@ class Creator extends Component {
     }
 
     getByUser() {
-        console.log("id" , this.props.user.id);
         return adService.getByUser(this.props.user.id)
                 .then((response) => {
-                    this.setState({userAds: response.data});
-                })
+                    this.setState({userAds: response.data}, () => {
+                        if (window.destroyAds) {
+                            window.destroyAds();
+                        }
+                        if (window.findAds) {
+                            window.findAds();
+                        }
+                    });
+                });
     }
 
     updateAd() {
@@ -99,7 +101,7 @@ class Creator extends Component {
         promise
             .then((response) => {
                 this.setState({ ad: response.data });
-                console.log("after set state ", this.state.ad);  
+                console.debug("after set state ", this.state.ad);  
             })
             .catch(console.error);
     }
@@ -124,16 +126,16 @@ class Creator extends Component {
             <div className="adForm row">
                 <div className="col-sm-6 col-md-6">
                     <div className="form-group">
-                        <label htmlFor="creatorCta">CTA</label>
-                        <input id="creatorCta" className="form-control" type="text" value={this.state.ad.cta ? this.state.ad.cta : ''} onChange={this.ctaChangeHandler}/>
+                        <label htmlFor="creatorImage">Image url</label>
+                        <input id="creatorImage" className="form-control" placeholder="Required: image url" type="text" value={this.state.ad.imageUrl ? this.state.ad.imageUrl : ''} onChange={this.imageUrlChangeHandler}/>
                     </div>
                     <div className="form-group">
                         <label htmlFor="creatorClick">Click url</label>
-                        <input id="creatorClick" className="form-control" type="text" value={this.state.ad.clickUrl ? this.state.ad.clickUrl : ''} onChange={this.clickUrlChangeHandler}/>
+                        <input id="creatorClick" className="form-control" placeholder="Required: click url" type="text" value={this.state.ad.clickUrl ? this.state.ad.clickUrl : ''} onChange={this.clickUrlChangeHandler}/>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="creatorImage">Image url</label>
-                        <input id="creatorImage" className="form-control" type="text" value={this.state.ad.imageUrl ? this.state.ad.imageUrl : ''} onChange={this.imageUrlChangeHandler}/>
+                        <label htmlFor="creatorCta">CTA</label>
+                        <input id="creatorCta" className="form-control" placeholder="Call to action" type="text" value={this.state.ad.cta ? this.state.ad.cta : ''} onChange={this.ctaChangeHandler}/>
                     </div>
                 </div>
                 <div className="col-sm-6 col-md-6">
@@ -148,9 +150,9 @@ class Creator extends Component {
                 </div>
             </div>
             
-            {this.state.ad.aid ? <DesktopPreview aid={this.state.ad.aid}/> : ""}
-            
-            <div ref={this.setScriptDivRef}></div>
+            {this.state.ad.aid ? 
+                this.state.isMobile ? <MobilePreview aid={this.state.ad.aid}/>  : <DesktopPreview aid={this.state.ad.aid}/>
+                : ""}
 
             {!!this.props.user && this.state.show ? <UserPrevious  ads={this.state.userAds}/> : ""}
         </div>);

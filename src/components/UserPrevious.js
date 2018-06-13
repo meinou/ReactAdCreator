@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-//import { showAd } from '../adcomponent';
 
 class UserPrevious extends Component {
     constructor(props) {

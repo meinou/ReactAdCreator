@@ -12,6 +12,16 @@ function findAds() {
     }
 }
 
+function destroyAds() {
+    var ads = document.querySelectorAll('[data-ad]');
+    for(var i = 0; i < ads.length; i++) {
+        ads[i].dataset.rendered = undefined;
+        while (ads[i].firstChild) {
+            ads[i].removeChild(ads[i].firstChild);
+        }
+    }
+}
+
 function httpGetAsync(theUrl, callback)
 {
     var xmlHttp = new XMLHttpRequest();
